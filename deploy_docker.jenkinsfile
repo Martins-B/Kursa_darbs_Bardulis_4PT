@@ -26,7 +26,7 @@ pipeline{
                 echo err.getMessage()
             }
         }
-        echo currentBuild.result
+        echo currentBuild.result 
     }
 }
         stage('Deploy docker') {
