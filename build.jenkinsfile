@@ -1,0 +1,29 @@
+pipeline {
+agent any
+stages {
+stage('Checkout code') {
+steps {
+git branch: 'main',
+url: 'https://github.com/MartinsBardulis/NodeJS_v3.git'
+}
+}
+stage('Build Next.js app') {
+steps {
+sh 'yarn install'
+sh 'yarn build'
+}
+}
+stage('Create Docker image') {
+steps {
+sh 'docker build -t nextjs-app-new .'
+}
+}
+stage('Push Docker image') {
+steps {
+sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/j1c6f5z0'
+sh 'docker tag nextjs-app-new:latest public.ecr.aws/j1c6f5z0/nextjs-app-new:latest'
+sh 'docker push public.ecr.aws/j1c6f5z0/nextjs-app-new:latest'
+}
+}
+}
+}
