@@ -5,7 +5,12 @@ environment {
         auth = credentials('aws_auth_token')
     }
 stages {
-
+stage('Checkout code') {
+steps {
+git branch: 'main',
+url: 'https://github.com/MartinsBardulis/NodeJS_v3.git'
+}
+}
 stage('Build Next.js app') {
 steps {
 sh 'yarn install'
