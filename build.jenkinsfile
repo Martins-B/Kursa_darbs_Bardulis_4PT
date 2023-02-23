@@ -15,14 +15,14 @@ sh 'yarn build'
 }
 stage('Create Docker image') {
 steps {
-sh 'docker build -t nextjs-app-new .'
+sh 'docker build -t nextjs-project0 .'
 }
 }
 stage('Push Docker image') {
 steps {
-sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/j1c6f5z0'
-sh 'docker tag nextjs-app-new:latest public.ecr.aws/j1c6f5z0/nextjs-app-new:latest'
-sh 'docker push public.ecr.aws/j1c6f5z0/nextjs-app-new:latest'
+sh 'aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 026747610699.dkr.ecr.eu-north-1.amazonaws.com'
+sh 'docker tag nextjs-project0:latest 026747610699.dkr.ecr.eu-north-1.amazonaws.com/nextjs-project0:latest'
+sh 'docker push 026747610699.dkr.ecr.eu-north-1.amazonaws.com/nextjs-project0:latest'
 }
 }
 }
