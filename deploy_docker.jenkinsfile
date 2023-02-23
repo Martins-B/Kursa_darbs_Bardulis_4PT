@@ -10,7 +10,7 @@ pipeline{
            steps {
         script {
             try {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@m${ip} "docker stop nextjs-app-new"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@m${ip} "docker stop nextjs-project0"'
             } catch (err) {
                 echo err.getMessage()
             }
@@ -22,7 +22,7 @@ pipeline{
              steps {
         script {
             try {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker rm nextjs-app-new"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker rm nextjs-project0"'
             } catch (err) {
                 echo err.getMessage()
             }
@@ -32,8 +32,8 @@ pipeline{
 }
         stage('Deploy docker') {
             steps {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker pull public.ecr.aws/j1c6f5z0/nextjs-app-new:latest"'
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker run -d --name nextjs-app-new -p 3000:3000 public.ecr.aws/j1c6f5z0/nextjs-app-new:latest"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker pull 026747610699.dkr.ecr.eu-north-1.amazonaws.com/nextjs-project0:latest"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker run -d --name nextjs-project0 -p 3000:3000 026747610699.dkr.ecr.eu-north-1.amazonaws.com/nextjs-project0:latest"'
         
             }
         }
