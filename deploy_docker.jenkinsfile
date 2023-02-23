@@ -3,6 +3,8 @@ pipeline{
     environment {
         ssh = credentials('pem_ec2')
         ip = "ec2-16-170-248-250.eu-north-1.compute.amazonaws.com"
+        auth = credentials('aws_auth_token')
+        uri = credentials('nextjs-project0_URI')
     }
 
     stages {
@@ -32,8 +34,8 @@ pipeline{
 }
         stage('Deploy docker') {
             steps {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 026747610699.dkr.ecr.eu-north-1.amazonaws.com; docker pull 026747610699.dkr.ecr.eu-north-1.amazonaws.com/nextjs-project0:latest"'
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 026747610699.dkr.ecr.eu-north-1.amazonaws.com; docker run -d --name nextjs-project0 -p 3000:3000 026747610699.dkr.ecr.eu-north-1.amazonaws.com/nextjs-project0:latest"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "${auth}; docker pull ${uri}:latest"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "${auth}; docker run -d --name nextjs-project0 -p 3000:3000 ${uri}:latest"'
         
             }
         }
