@@ -2,7 +2,7 @@ pipeline{
     agent any
     environment {
         ssh = credentials('pem_ec2')
-        ip = "ec2-16-170-248-250.eu-north-1.compute.amazonaws.com"
+        ip = "ec2-16-170-215-21.eu-north-1.compute.amazonaws.com"
         auth = credentials('aws_auth_token')
         uri = credentials('nextjs-project0_URI')
     }
