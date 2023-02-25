@@ -1,7 +1,7 @@
 pipeline {
 agent any
 environment {
-        uri = credentials('nextjs-project0_URI')
+        uri = credentials('nextjs-project1_URI')
         auth = credentials('aws_auth_token')
     }
 stages {
@@ -19,7 +19,7 @@ sh 'yarn build'
 }
 stage('Create Docker image') {
 steps {
-sh 'docker build -t nextjs-project0 .'
+sh 'docker build -t nextjs-project1 .'
 }
 }
 stage('Push Docker image') {
