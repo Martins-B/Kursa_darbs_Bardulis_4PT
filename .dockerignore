@@ -6,3 +6,7 @@ npm-debug.log
 .coverage.*
 .env
 .aws
+node_modules
+.next
+.github
+.husky
