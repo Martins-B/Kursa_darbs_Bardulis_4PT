@@ -25,8 +25,8 @@ sh 'docker build -t nextjs-project1 .'
 stage('Push Docker image') {
 steps {
                 sh "${auth}"
-                sh "docker tag nextjs-project0:latest ${uri}:${BUILD_NUMBER}"
-                sh "docker tag nextjs-project0:latest ${uri}:latest"
+                sh "docker tag nextjs-project1:latest ${uri}:${BUILD_NUMBER}"
+                sh "docker tag nextjs-project1:latest ${uri}:latest"
                 sh "docker push ${uri}:${BUILD_NUMBER}"
                 sh "docker push ${uri}:latest"
             }
