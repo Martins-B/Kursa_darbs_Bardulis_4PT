@@ -4,7 +4,7 @@ pipeline{
         ssh = credentials('pem_ec2')
         ip = "ec2-13-49-228-138.eu-north-1.compute.amazonaws.com"
         auth = credentials('aws_auth_token')
-        uri = credentials('nextjs-project0_URI')
+        uri = credentials('nextjs-project1_URI')
     }
 
     stages {
@@ -12,7 +12,7 @@ pipeline{
            steps {
         script {
             try {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker stop nextjs-project0"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker stop nextjs-project1"'
             } catch (err) {
                 echo err.getMessage()
             }
@@ -24,7 +24,7 @@ pipeline{
              steps {
         script {
             try {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker rm nextjs-project0"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker rm nextjs-project1"'
             } catch (err) {
                 echo err.getMessage()
             }
@@ -35,7 +35,7 @@ pipeline{
         stage('Deploy docker') {
             steps {
                 sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "${auth}; docker pull ${uri}:latest"'
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "${auth}; docker run -d --name nextjs-project0 -p 3000:3000 ${uri}:latest"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "${auth}; docker run -d --name nextjs-project1 -p 3000:3000 ${uri}:latest"'
         
             }
         }
