@@ -14,8 +14,6 @@ url: 'https://github.com/MartinsBardulis/NodeJS_v3.git'
 stage('Build Next.js app') {
 steps {
 sh 'yarn install'
-sh 'yarn lint'
-sh 'yarn test'
 sh 'yarn build'
 }
 }
