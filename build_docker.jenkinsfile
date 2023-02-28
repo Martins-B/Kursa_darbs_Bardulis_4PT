@@ -27,8 +27,9 @@ steps {
                 sh "${auth}"
                 sh "docker tag nextjs-project1:latest ${uri}:${BUILD_NUMBER}"
                 sh "docker tag nextjs-project1:latest ${uri}:latest"
-                sh "docker push ${uri}:${BUILD_NUMBER}"
                 sh "docker push ${uri}:latest"
+                sh "docker push ${uri}:${BUILD_NUMBER}"
+                
             }
 }
 }
