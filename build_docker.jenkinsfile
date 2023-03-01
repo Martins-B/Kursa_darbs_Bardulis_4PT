@@ -13,12 +13,16 @@ url: 'https://github.com/MartinsBardulis/NodeJS_v3.git'
 }
 
 stage('SonarQube analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh "./gradlew sonarqube"
-                }
-            }
-        }
+  environment {
+    scannerHome = tool 'Sonar-scanner'
+  }
+  steps {
+    withSonarQubeEnv('SonarQube') {
+      sh "${scannerHome}/bin/sonar-scanner"
+    }
+  }
+}
+
         stage("Quality gate") {
             steps {
                 waitForQualityGate abortPipeline: true
