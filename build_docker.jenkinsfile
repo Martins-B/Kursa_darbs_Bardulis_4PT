@@ -8,11 +8,6 @@ node {
       sh "${scannerHome}/bin/sonar-scanner"
     }
   }
-  stage("Quality gate") {
-            steps {
-                waitForQualityGate abortPipeline: true
-            }
-        }
 }
 pipeline {
 agent any
@@ -21,6 +16,12 @@ environment {
         auth = credentials('aws_auth_token')
     }
 stages {
+stage("Quality gate") {
+            steps {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+
 stage('Checkout code') {
 steps {
 git branch: 'main',
