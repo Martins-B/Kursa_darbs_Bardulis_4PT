@@ -24,8 +24,7 @@ stage('SonarQube analysis') {
                 waitForQualityGate abortPipeline: true
             }
         }
-    }
-
+    
 stage('Build Next.js app') {
 steps {
 sh 'yarn install'
@@ -46,5 +45,6 @@ steps {
                 sh "docker push ${uri}:${BUILD_NUMBER}"
                 
             }
+}
 }
 }
