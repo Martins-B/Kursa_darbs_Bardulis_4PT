@@ -13,6 +13,9 @@ url: 'https://github.com/MartinsBardulis/NodeJS_v3.git'
 }
 
 stage('SonarQube analysis') {
+environment {
+      SCANNER_HOME = tool 'Sonar-scanner'
+    }
             steps {
                 withSonarQubeEnv('SonarQube') {
                     sh "./gradlew sonarqube"
