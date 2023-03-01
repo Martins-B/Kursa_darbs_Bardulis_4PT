@@ -8,6 +8,11 @@ node {
       sh "${scannerHome}/bin/sonar-scanner"
     }
   }
+  stage("Quality gate") {
+            steps {
+                waitForQualityGate abortPipeline: true
+            }
+        }
 }
 pipeline {
 agent any
