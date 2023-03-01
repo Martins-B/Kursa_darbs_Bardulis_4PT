@@ -49,6 +49,11 @@ steps {
                 sh "docker push ${uri}:${BUILD_NUMBER}"
                 
             }
-}
+  }
+stage('Cleanup workspace') {
+steps {
+        cleanWs()
+     }
+   }
 }
 }
