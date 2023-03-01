@@ -11,6 +11,21 @@ git branch: 'main',
 url: 'https://github.com/MartinsBardulis/NodeJS_v3.git'
 }
 }
+
+stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh "./gradlew sonarqube"
+                }
+            }
+        }
+        stage("Quality gate") {
+            steps {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+    }
+
 stage('Build Next.js app') {
 steps {
 sh 'yarn install'
