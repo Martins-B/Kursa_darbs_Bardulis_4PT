@@ -5,6 +5,7 @@ environment {
         auth = credentials('aws_auth_token')
         scannerHome = tool 'Sonar-scanner'
     }
+    
 stages {
 
 stage('SonarQube Analysis') {
@@ -14,6 +15,7 @@ stage('SonarQube Analysis') {
     }
   }
 }
+
 stage("Quality gate") {
             steps {
                 waitForQualityGate abortPipeline: true
@@ -33,25 +35,27 @@ sh 'yarn install'
 sh 'yarn build'
 }
 }
+
 stage('Create Docker image') {
 steps {
 sh 'docker build -t nextjs-project1 .'
 }
 }
+
 stage('Push Docker image') {
 steps {
                 sh "${auth}"
                 sh "docker tag nextjs-project1:latest ${uri}:${BUILD_NUMBER}"
-                sh "docker tag nextjs-project1:latest ${uri}:latest"
-                sh "docker push ${uri}:latest"
                 sh "docker push ${uri}:${BUILD_NUMBER}"
                 
             }
   }
+  
 stage('Cleanup workspace') {
 steps {
         cleanWs()
      }
    }
+   
 }
 }
