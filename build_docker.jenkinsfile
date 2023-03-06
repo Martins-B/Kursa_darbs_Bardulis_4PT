@@ -1,7 +1,7 @@
 pipeline {
 agent any
 environment {
-        uri = credentials('nextjs-project1_URI')
+        uri = credentials('nextjs-project2_URI')
         auth = credentials('aws_auth_token')
         scannerHome = tool 'Sonar-scanner'
     }
@@ -38,14 +38,14 @@ sh 'yarn build'
 
 stage('Create Docker image') {
 steps {
-sh 'docker build -t nextjs-project1:$BUILD_NUMBER .'
+sh 'docker build -t nextjs-project2:$BUILD_NUMBER .'
 }
 }
 
 stage('Push Docker image') {
 steps {
                 sh "${auth}"
-                sh "docker tag nextjs-project1:$BUILD_NUMBER ${uri}:${BUILD_NUMBER}"
+                sh "docker tag nextjs-project2:$BUILD_NUMBER ${uri}:${BUILD_NUMBER}"
                 sh "docker push ${uri}:${BUILD_NUMBER}"
                 
             }
