@@ -34,6 +34,8 @@ steps {
 sh 'yarn install'
 sh 'yarn lint'
 sh 'yarn build'
+sh 'yarn test'
+sh 'yarn build'
 }
 }
 
