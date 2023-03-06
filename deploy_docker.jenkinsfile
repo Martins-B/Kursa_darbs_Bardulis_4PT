@@ -5,7 +5,7 @@ pipeline{
         ip = "ec2-16-170-212-136.eu-north-1.compute.amazonaws.com"
         auth = credentials('aws_auth_token')
         uri = credentials('nextjs-project2_URI')
-        number = "${params.Build}"
+        build = "${params.Build}"
     }
 
     stages {
@@ -35,8 +35,8 @@ pipeline{
 }
         stage('Deploy docker') {
             steps {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker pull ${uri}:${number}"'
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker run -d --name nextjs-project2 -p 3000:3000 ${uri}:${number}"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker pull ${uri}:${build}"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker run -d --name nextjs-project2 -p 3000:3000 ${uri}:${build}"'
         
             }
         }
