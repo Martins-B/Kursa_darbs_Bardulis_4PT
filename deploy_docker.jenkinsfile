@@ -5,7 +5,7 @@ pipeline{
         ip = "ec2-13-53-129-37.eu-north-1.compute.amazonaws.com"
         auth = credentials('aws_auth_token')
         uri = credentials('nextjs-project2_URI')
-        buildNumber = ${params.BUILD_NUMBER}
+        buildNumber = "${params.BUILD_NUMBER}"
     }
 
     stages {
