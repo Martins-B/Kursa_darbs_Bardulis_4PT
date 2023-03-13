@@ -60,11 +60,6 @@ steps {
    }
    
    stage('Deploy') {
-            // Trigger deploy pipeline after successful build
-            when {
-                buildingTag()
-            }
-        
             steps {
                 build job: 'deploy_pipeline',
                       parameters: [string(name: 'BUILD_NUMBER', value: "${env.BUILD_NUMBER}")]
