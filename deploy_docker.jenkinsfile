@@ -23,7 +23,7 @@ pipeline{
            steps {
         script {
             try {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "docker stop nextjs-project2"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker stop nextjs-project2"'
 
 
             } catch (err) {
@@ -37,7 +37,7 @@ pipeline{
              steps {
         script {
             try {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "docker rm nextjs-project2"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "docker rm nextjs-project2"'
             } catch (err) {
                 echo err.getMessage()
             }
@@ -47,8 +47,8 @@ pipeline{
 }
         stage('Deploy docker') {
             steps {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "${auth}; docker pull ${uri}:${buildNumber}"'
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "${auth}; docker run -d --name nextjs-project2 -p 3000:3000 ${uri}:${buildNumber}"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "${auth}; docker pull ${uri}:${buildNumber}"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "${auth}; docker run -d --name nextjs-project2 -p 3000:3000 ${uri}:${buildNumber}"'
         
             }
         }
