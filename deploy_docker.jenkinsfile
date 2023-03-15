@@ -35,8 +35,8 @@ pipeline{
 }
         stage('Deploy docker') {
             steps {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "${auth}; docker pull ${uri}:${buildNumber}"'
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" admin@${ip} "${auth}; docker run -d --name nextjs-project2 -p 3000:3000 ${uri}:${buildNumber}"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${env.PUBLIC_IP} "${auth}; docker pull ${uri}:${buildNumber}"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${env.PUBLIC_IP} "${auth}; docker run -d --name nextjs-project2 -p 3000:3000 ${uri}:${buildNumber}"'
         
             }
         }
