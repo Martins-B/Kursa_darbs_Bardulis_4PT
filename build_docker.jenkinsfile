@@ -61,7 +61,7 @@ steps {
    
    stage('Deploy') {
             steps {
-                build job: 'deploy_pipeline',
+                build wait: false, job: 'deploy_pipeline',
                       parameters: [string(name: 'BUILD_NUMBER', value: "${env.BUILD_NUMBER}")]
             }
         }
