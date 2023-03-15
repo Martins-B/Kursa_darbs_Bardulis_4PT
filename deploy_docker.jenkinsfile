@@ -23,7 +23,8 @@ pipeline{
            steps {
         script {
             try {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "docker stop nextjs-project2"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@' + aws_instance.my_ec2_deploy.public_ip + ' "docker stop nextjs-project2"'
+
             } catch (err) {
                 echo err.getMessage()
             }
