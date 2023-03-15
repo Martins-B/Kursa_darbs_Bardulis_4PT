@@ -7,15 +7,6 @@ resource "aws_instance" "my_ec2_deploy" {
   instance_type = "t3.micro"
   key_name      = "AWSstockholm"
   vpc_security_group_ids = ["sg-0cf66e1b712e421c3"]
-  
-  provisioner "remote-exec" {
-    inline = [
-      "sudo yum update -y",
-      "sudo amazon-linux-extras install docker -y",
-      "sudo service docker start",
-      "sudo usermod -a -G docker ec2-user"
-    ]
-  }
   tags = {
     Name = "my-ec2-instance_deploy"
   }
