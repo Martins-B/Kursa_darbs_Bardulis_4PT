@@ -65,6 +65,25 @@ steps {
                       parameters: [string(name: 'BUILD_NUMBER', value: "${env.BUILD_NUMBER}")]
             }
         }
-   
+        
+stage('Create EC2 instance') {
+  steps {
+    withCredentials([string(credentialsId: 'aws_access_key', variable: 'AWS_ACCESS_KEY_ID'), 
+                     string(credentialsId: 'aws_secret_key', variable: 'AWS_SECRET_ACCESS_KEY')]) {
+      sh 'terraform init'
+      sh 'terraform apply -auto-approve \
+            -var "aws_access_key=${AWS_ACCESS_KEY_ID}" \
+            -var "aws_secret_key=${AWS_SECRET_ACCESS_KEY}"'
+
+      script {
+        def publicIp = sh (script: 'terraform output public_ip', returnStdout: true).trim()
+        env.PUBLIC_IP = publicIp
+      }
+    }
+    
+  }
+}
+
+
 }
 }
