@@ -17,14 +17,6 @@ stage('SonarQube Analysis') {
   }
 }
 
-stage("Quality gate") {
-            steps{
-        timeout(time: 1, unit: 'MINUTES') {
-            waitForQualityGate abortPipeline: true
-            }
-        }
-  }
-
 stage('Install dependencies') {
 steps {
 sh 'npm install'
@@ -35,6 +27,14 @@ stage('Build Next.js app') {
     steps {
       sh 'npm run build'
     }
+  }
+
+stage("Quality gate") {
+            steps{
+        timeout(time: 1, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+            }
+        }
   }
 
 stage('Create Docker image') {
