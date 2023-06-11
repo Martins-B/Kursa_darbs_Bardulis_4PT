@@ -1,31 +1,30 @@
-pipeline{
-    agent any
-    environment {
-        ssh = credentials('pem_ec2')
-        auth = credentials('aws_auth_token')
-        uri = credentials('martinsb_URI')
-        build = "${params.Builds}"
-    }
+pipeline {
+  agent any
+
+  environment {
+    ssh = credentials('pem_ec2')
+    auth = credentials('aws_auth_token')
+    uri = credentials('martinsb_URI')
+    build = "${params.Builds}"
+  }
 
   stages {
-  
-    stage('Innit Terraform') {
-            steps {
-             sh 'terraform init'
-            }
-        }
-        
-    stage('Terraform destroy') {
-           steps {
-               sh 'terraform destroy -auto-approve -var "pem_file=${ssh}" -var "pull_command=docker pull ${uri}:${build}" -var "deploy_command=docker run -d --name martinsb -p 3000:3000 ${uri}:${build}"'
-            }
-        }   
-    
-        stage('Create EC2 Instance and Deploy docker') {
-            steps {
-             sh 'terraform apply -auto-approve -var "pem_file=${ssh}" -var "pull_command=docker pull ${uri}:${build}" -var "deploy_command=docker run -d --name martinsb -p 3000:3000 ${uri}:${build}"'
-            }
-        }
-        
+    stage('Init Terraform') {
+      steps {
+        sh 'terraform init'
+      }
     }
+
+    stage('Terraform destroy') {
+      steps {
+        sh 'terraform destroy -auto-approve -var pem_file=${ssh} -var pull_command=docker pull ${uri}:${build} -var deploy_command="docker run -d --name martinsb -p 3000:3000 ${uri}:${build}"'
+      }
+    }
+
+    stage('Create EC2 Instance and Deploy Docker') {
+      steps {
+        sh 'terraform apply -auto-approve -var pem_file=${ssh} -var pull_command="docker pull ${uri}:${build}" -var deploy_command="docker run -d --name martinsb -p 3000:3000 ${uri}:${build}"'
+      }
+    }
+  }
 }
