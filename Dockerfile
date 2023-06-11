@@ -1,10 +1,6 @@
-FROM node:18-alpine
+FROM node:18-alpine AS base
 
 WORKDIR /app
-
-COPY package.json yarn.lock ./
-
-RUN yarn install
 
 COPY . .
 
@@ -12,4 +8,4 @@ ENV NODE_ENV production
 
 EXPOSE 3000
 
-CMD [ "yarn", "start" ]
+CMD [ "npm", "run", "start" ]
