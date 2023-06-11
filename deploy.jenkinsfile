@@ -1,4 +1,4 @@
-pipeline{
+pipeline {
     agent any
     environment {
         ssh = credentials('pem_ec2')
@@ -8,47 +8,44 @@ pipeline{
     }
 
     stages {
-    
-    stage('Create EC2 instance') {
-  steps {
-    sh 'terraform init'
-    sh 'terraform plan'
-    sh 'terraform apply -auto-approve'
-  }
-}
+        stage('Create EC2 instance') {
+            steps {
+                sh 'terraform init'
+                sh 'terraform plan'
+                sh 'terraform apply -auto-approve'
+            }
+        }
 
-    
         stage('Stop docker') {
-           steps {
-        script {
-            try {
-                sh "ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "docker stop martinsb""
-
-
-            } catch (err) {
-                echo err.getMessage()
+            steps {
+                script {
+                    try {
+                        sh "ssh -T -o StrictHostKeyChecking=no -i \"${ssh}\" ec2-user@${aws_instance.my_ec2_deploy.public_ip} \"docker stop martinsb\""
+                    } catch (err) {
+                        echo err.getMessage()
+                    }
+                }
+                echo currentBuild.result
             }
         }
-        echo currentBuild.result
-    }
-}   
+
         stage('Remove docker') {
-             steps {
-        script {
-            try {
-                sh "ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "docker rm martinsb""
-            } catch (err) {
-                echo err.getMessage()
+            steps {
+                script {
+                    try {
+                        sh "ssh -T -o StrictHostKeyChecking=no -i \"${ssh}\" ec2-user@${aws_instance.my_ec2_deploy.public_ip} \"docker rm martinsb\""
+                    } catch (err) {
+                        echo err.getMessage()
+                    }
+                }
+                echo currentBuild.result
             }
         }
-        echo currentBuild.result
-    }
-}
+
         stage('Deploy docker') {
             steps {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "${auth}; docker pull ${uri}:${buildNumber}"'
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "${auth}; docker run -d --name martinsb -p 3000:3000 ${uri}:${buildNumber}"'
-        
+                sh "ssh -T -o StrictHostKeyChecking=no -i \"${ssh}\" ec2-user@${aws_instance.my_ec2_deploy.public_ip} \"${auth}; docker pull ${uri}:${buildNumber}\""
+                sh "ssh -T -o StrictHostKeyChecking=no -i \"${ssh}\" ec2-user@${aws_instance.my_ec2_deploy.public_ip} \"${auth}; docker run -d --name martinsb -p 3000:3000 ${uri}:${buildNumber}\""
             }
         }
     }
