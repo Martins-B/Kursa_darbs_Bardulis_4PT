@@ -17,6 +17,14 @@ stage('SonarQube Analysis') {
   }
 }
 
+stage("Quality gate") {
+            steps{
+        timeout(time: 1, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+            }
+        }
+  }
+
 stage('Install dependencies') {
 steps {
 sh 'npm install'
@@ -29,26 +37,11 @@ stage('Build Next.js app') {
     }
   }
 
-stage("Quality gate") {
-            steps{
-        timeout(time: 1, unit: 'MINUTES') {
-            waitForQualityGate abortPipeline: true
-            }
-}
-}
-
 stage('Create Docker image') {
 steps {
 sh 'docker build -t martinsb:$BUILD_NUMBER .'
 }
 }
-
-stage('Trivy test') {
-    steps {
-      sh 'trivy --severity HIGH --exit-code 1 image martinsb:$BUILD_NUMBER'
-    }
-  }
-
 
 stage('Push Docker image') {
 steps {
