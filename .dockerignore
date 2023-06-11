@@ -1,5 +1,5 @@
-node_modules
-build
+buildjenkinsfile
+deploy.jenkinsfile
 .dockerignore
-Dockerfile
-Dockerfile.*
+.gitignore
+/.github
