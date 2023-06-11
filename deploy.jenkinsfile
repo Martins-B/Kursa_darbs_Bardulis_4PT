@@ -22,7 +22,7 @@ pipeline{
            steps {
         script {
             try {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "docker stop martinsb"'
+                sh "ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "docker stop martinsb""
 
 
             } catch (err) {
@@ -36,7 +36,7 @@ pipeline{
              steps {
         script {
             try {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "docker rm martinsb"'
+                sh "ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "docker rm martinsb""
             } catch (err) {
                 echo err.getMessage()
             }
