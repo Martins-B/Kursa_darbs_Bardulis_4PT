@@ -46,8 +46,8 @@ pipeline{
 }
         stage('Deploy docker') {
             steps {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "${auth}; docker pull ${uri}:${buildNumber}"'
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "${auth}; docker run -d --name martinsb -p 3000:3000 ${uri}:${buildNumber}"'
+                sh "ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "${auth}; docker pull ${uri}:${buildNumber}""
+                sh "ssh -T -o StrictHostKeyChecking=no -i "${ssh}" ec2-user@${aws_instance.my_ec2_deploy.public_ip} "${auth}; docker run -d --name martinsb -p 3000:3000 ${uri}:${buildNumber}""
         
             }
         }
