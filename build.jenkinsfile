@@ -1,9 +1,10 @@
 pipeline {
 agent any
 environment {
-        uri = credentials('nextjs-project2_URI')
+        uri = credentials('martinsb_URI')
         auth = credentials('aws_auth_token')
         scannerHome = tool 'Sonar-scanner'
+       
     }
     
 stages {
@@ -16,38 +17,43 @@ stage('SonarQube Analysis') {
   }
 }
 
-stage("Quality gate") {
-            steps {
-                waitForQualityGate abortPipeline: true
-            }
-        }
+stage('Install dependencies') {
+steps {
+sh 'npm install'
+}
+}
 
-stage('Checkout code') {
-steps {
-git branch: 'main',
-url: 'https://github.com/MartinsBardulis/NodeJS_v3.git'
-}
-}
-    
-stage('Build, Lint and Test Next.js app') {
-steps {
-sh 'yarn install'
-sh 'yarn lint'
-sh 'yarn build'
-sh 'yarn test'
+stage('Build Next.js app') {
+    steps {
+      sh 'npm run build'
+    }
+  }
+
+stage("Quality gate") {
+            steps{
+        timeout(time: 1, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+            }
 }
 }
 
 stage('Create Docker image') {
 steps {
-sh 'docker build -t nextjs-project2:$BUILD_NUMBER .'
+sh 'docker build -t martinsb:$BUILD_NUMBER .'
 }
 }
+
+stage('Trivy test') {
+    steps {
+      sh 'trivy --severity HIGH --exit-code 1 image martinsb:$BUILD_NUMBER'
+    }
+  }
+
 
 stage('Push Docker image') {
 steps {
                 sh "${auth}"
-                sh "docker tag nextjs-project2:$BUILD_NUMBER ${uri}:${BUILD_NUMBER}"
+                sh "docker tag martinsb:$BUILD_NUMBER ${uri}:${BUILD_NUMBER}"
                 sh "docker push ${uri}:${BUILD_NUMBER}"
                 
             }
@@ -58,13 +64,6 @@ steps {
         cleanWs()
      }
    }
-   
-   stage('Deploy') {
-            steps {
-                build wait: false, job: 'deploy_pipeline',
-                      parameters: [string(name: 'BUILD_NUMBER', value: "${env.BUILD_NUMBER}")]
-            }
-        }
         
 }
 }
