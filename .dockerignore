@@ -1,4 +1,4 @@
-buildjenkinsfile
+build.jenkinsfile
 deploy.jenkinsfile
 .dockerignore
 .gitignore
