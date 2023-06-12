@@ -28,4 +28,15 @@ pipeline{
         }
         
     }
+    post {
+    failure {
+      slackSend (color: '#db0c02', message: "Deploy pipeline build #$BUILD_NUMBER failed!!!")
+    }
+    success {
+        slackSend(color: '#02db1f', message: "Deploy pipeline build #$BUILD_NUMBER finished!!!")
+    }
+    always {
+      cleanWs()
+    }
+  }
 }
