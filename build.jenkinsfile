@@ -59,4 +59,13 @@ steps {
    }
         
 }
+post {
+    failure {
+      slackSend (color: '#db0c02', message: "Build pipeline build #$BUILD_NUMBER failed!!!")
+    }
+    success {
+        slackSend(color: '#02db1f', message: "Build pipeline build #$BUILD_NUMBER finished!!!")
+    }
+  }
+
 }
