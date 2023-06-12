@@ -1,0 +1,71 @@
+pipeline {
+agent any
+environment {
+        uri = credentials('martinsb_URI')
+        auth = credentials('aws_auth_token')
+        scannerHome = tool 'Sonar-scanner'
+       
+    }
+    
+stages {
+
+stage('SonarQube Analysis') {
+  steps {
+    withSonarQubeEnv('SonarQube') {
+      sh "${scannerHome}/bin/sonar-scanner"
+    }
+  }
+}
+
+stage('Install dependencies') {
+steps {
+sh 'npm install'
+}
+}
+
+stage('Build Next.js app') {
+    steps {
+      sh 'npm run build'
+    }
+  }
+
+stage("Quality gate") {
+            steps{
+        timeout(time: 1, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+            }
+        }
+  }
+
+stage('Create Docker image') {
+steps {
+sh 'docker build -t martinsb:$BUILD_NUMBER .'
+}
+}
+
+stage('Push Docker image') {
+steps {
+                sh "${auth}"
+                sh "docker tag martinsb:$BUILD_NUMBER ${uri}:${BUILD_NUMBER}"
+                sh "docker push ${uri}:${BUILD_NUMBER}"
+                
+            }
+  }
+  
+stage('Cleanup workspace') {
+steps {
+        cleanWs()
+     }
+   }
+        
+}
+post {
+    failure {
+      slackSend (color: '#db0c02', message: "Build pipeline build #$BUILD_NUMBER failed!!!")
+    }
+    success {
+        slackSend(color: '#02db1f', message: "Build pipeline build #$BUILD_NUMBER finished!!!")
+    }
+  }
+
+}
